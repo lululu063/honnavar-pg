@@ -3,19 +3,34 @@
 import { useEffect, useState } from "react";
 
 export default function Home() {
+
+  // FORM
   const [title, setTitle] = useState("");
   const [rent, setRent] = useState("");
   const [location, setLocation] = useState("");
   const [phone, setPhone] = useState("");
 
+  // ROOMS
   const [rooms, setRooms] = useState<any[]>([]);
 
-  // Fetch rooms
-  const fetchRooms = async () => {
-    try {
-      const response = await fetch("/api/rooms");
+  // YOUTUBE
+  const [videoUrl, setVideoUrl] = useState(
+    "https://www.youtube.com/watch?v=jfKfPfyJRdk"
+  );
 
-      const data = await response.json();
+  // NOTES
+  const [notes, setNotes] = useState("");
+
+  // FETCH ROOMS
+  const fetchRooms = async () => {
+
+    try {
+
+      const response =
+        await fetch("/api/rooms");
+
+      const data =
+        await response.json();
 
       setRooms(data.rooms);
 
@@ -24,25 +39,49 @@ export default function Home() {
     }
   };
 
+  // LOAD PAGE
   useEffect(() => {
     fetchRooms();
   }, []);
 
-  // Submit room
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  // LOAD NOTES
+  useEffect(() => {
 
-    // Validation
-    if (!title || !rent || !location || !phone) {
-      alert("Please fill all fields");
-      return;
+    const saved =
+      localStorage.getItem("notes");
+
+    if (saved) {
+      setNotes(saved);
     }
 
+  }, []);
+
+  // SAVE NOTES
+  useEffect(() => {
+
+    localStorage.setItem(
+      "notes",
+      notes
+    );
+
+  }, [notes]);
+
+  // ADD PG
+  const handleSubmit = async (
+    e: React.FormEvent
+  ) => {
+
+    e.preventDefault();
+
     await fetch("/api/rooms", {
+
       method: "POST",
+
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type":
+          "application/json",
       },
+
       body: JSON.stringify({
         title,
         rent,
@@ -51,201 +90,579 @@ export default function Home() {
       }),
     });
 
-    alert("Room Added Successfully!");
+    fetchRooms();
 
-    // Clear form
     setTitle("");
     setRent("");
     setLocation("");
     setPhone("");
-
-    // Reload listings
-    fetchRooms();
   };
 
   return (
-    <main className="min-h-screen bg-gray-100 p-6">
+    <main className="
+      min-h-screen
+      bg-[#f5f7fb]
+    ">
 
-      {/* HEADER */}
-      <div className="max-w-6xl mx-auto">
+      {/* NAVBAR */}
+      <nav className="
+        bg-white
+        shadow-md
+        sticky top-0 z-50
+      ">
+        <div className="
+          max-w-7xl mx-auto
+          px-6 py-5
+          flex items-center
+          justify-between
+        ">
 
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-8 rounded-3xl shadow-lg mb-10">
-          <h1 className="text-4xl font-bold mb-3">
-            Honnavar PG Finder
+          <h1 className="
+            text-3xl font-black
+            text-blue-600
+          ">
+            Honnavar PG
           </h1>
 
-          <p className="text-lg opacity-90">
-            Find affordable PGs and rental rooms in Honnavar.
-          </p>
+          <button className="
+            bg-blue-600
+            text-white
+            px-6 py-3
+            rounded-2xl
+            font-bold
+          ">
+            Explore
+          </button>
         </div>
+      </nav>
 
-{/* RADIO PLAYER */}
-<div className="bg-white p-6 rounded-3xl shadow-md mb-10">
-  <h2 className="text-2xl font-bold mb-6">
-    📻 Live Radio Stations
-  </h2>
+      {/* RADIO */}
+      <section className="
+        max-w-7xl mx-auto
+        px-6 py-16
+      ">
 
-  <div className="grid md:grid-cols-2 gap-6">
+        <h2 className="
+          text-5xl font-black
+          mb-10
+          text-center
+        ">
+          🎵 Live Radio
+        </h2>
 
-    {/* Kannada Radio */}
-    <div className="border rounded-2xl p-5 shadow-sm">
-      <h3 className="text-xl font-semibold mb-2">
-        🎶 Kannada Hits Radio
-      </h3>
+        <div className="
+          grid md:grid-cols-4
+          gap-6
+        ">
 
-      <p className="text-gray-600 mb-4">
-        Relax with Kannada music while browsing PG listings.
-      </p>
+          {/* KANNADA */}
+          <div className="
+            bg-white
+            rounded-[30px]
+            p-6
+            shadow-xl
+          ">
+            <h3 className="
+              text-2xl font-bold
+              mb-4
+            ">
+              Kannada FM
+            </h3>
 
-      <audio controls className="w-full">
-        <source
-          src="https://stream-150.zeno.fm/n4gzbe9ufzzuv"
-          type="audio/mpeg"
-        />
+            <audio controls className="w-full">
+              <source
+                src="https://stream.zeno.fm/n4gzbe9ufzzuv"
+                type="audio/mpeg"
+              />
+            </audio>
+          </div>
 
-        Your browser does not support audio.
-      </audio>
-    </div>
+          {/* HINDI */}
+          <div className="
+            bg-white
+            rounded-[30px]
+            p-6
+            shadow-xl
+          ">
+            <h3 className="
+              text-2xl font-bold
+              mb-4
+            ">
+              Hindi FM
+            </h3>
 
-    {/* Urdu Qawwali */}
-    <div className="border rounded-2xl p-5 shadow-sm">
-      <h3 className="text-xl font-semibold mb-2">
-        🕌 Urdu Qawwali Radio
-      </h3>
+            <audio controls className="w-full">
+              <source
+                src="https://stream.zeno.fm/f3wvbbqmdg8uv"
+                type="audio/mpeg"
+              />
+            </audio>
+          </div>
 
-      <p className="text-gray-600 mb-4">
-        Listen to soulful qawwali and sufi music.
-      </p>
+          {/* ENGLISH */}
+          <div className="
+            bg-white
+            rounded-[30px]
+            p-6
+            shadow-xl
+          ">
+            <h3 className="
+              text-2xl font-bold
+              mb-4
+            ">
+              English FM
+            </h3>
 
-      <audio controls className="w-full">
-        <source
-          src="https://stream.zeno.fm/f3wvbbqmdg8uv"
-          type="audio/mpeg"
-        />
+            <audio controls className="w-full">
+              <source
+                src="https://stream.revma.ihrhls.com/zc561"
+                type="audio/mpeg"
+              />
+            </audio>
+          </div>
 
-        Your browser does not support audio.
-      </audio>
-    </div>
+          {/* NEWS */}
+          <div className="
+            bg-white
+            rounded-[30px]
+            p-6
+            shadow-xl
+          ">
+            <h3 className="
+              text-2xl font-bold
+              mb-4
+            ">
+              BBC News
+            </h3>
 
-    {/* BBC News */}
-    <div className="border rounded-2xl p-5 shadow-sm md:col-span-2">
-      <h3 className="text-xl font-semibold mb-2">
-        📰 BBC World News Radio
-      </h3>
+            <audio controls className="w-full">
+              <source
+                src="https://stream.live.vc.bbcmedia.co.uk/bbc_world_service"
+                type="audio/mpeg"
+              />
+            </audio>
+          </div>
 
-      <p className="text-gray-600 mb-4">
-        International live news updates.
-      </p>
+        </div>
+      </section>
 
-      <audio controls className="w-full">
-        <source
-          src="https://stream.live.vc.bbcmedia.co.uk/bbc_world_service"
-          type="audio/mpeg"
-        />
+      {/* HERO */}
+      <section className="
+        max-w-4xl
+        mx-auto
+        px-6 py-10
+        text-center
+      ">
 
-        Your browser does not support audio.
-      </audio>
-    </div>
+        <h1 className="
+          text-6xl font-black
+          leading-tight
+          mb-8
+        ">
+          Find Your Perfect{" "}
 
-  </div>
+          <span className="
+            text-blue-600
+          ">
+            PG
+          </span>
+        </h1>
+
+        <p className="
+          text-xl text-gray-600
+          mb-10
+        ">
+          PG listings + YouTube workspace +
+          notes + live radio.
+        </p>
+
+        <div className="
+          bg-white
+          rounded-[30px]
+          p-6
+          shadow-xl
+        ">
+
+          <input
+            type="text"
+            placeholder="Search location..."
+            className="
+              w-full
+              border
+              rounded-2xl
+              p-5
+              outline-none
+            "
+          />
+
+          <button className="
+            w-full mt-5
+            bg-blue-600
+            text-white
+            p-5
+            rounded-2xl
+            font-bold
+          ">
+            Search PG
+          </button>
+        </div>
+      </section>
+
+      {/* YOUTUBE */}
+      <section className="
+        max-w-5xl
+        mx-auto
+        px-6
+        mb-20
+      ">
+
+        <div className="
+          bg-gradient-to-br
+          from-blue-500
+          to-indigo-600
+          rounded-[40px]
+          p-6
+          shadow-2xl
+        ">
+
+          <h2 className="
+            text-4xl
+            font-black
+            text-white
+            mb-6
+            text-center
+          ">
+            🎥 YouTube Workspace
+          </h2>
+
+       {/* PLAYER */}
+<div className="
+  relative
+  w-full
+  overflow-hidden
+  rounded-[30px]
+  bg-black
+  aspect-video
+">
+
+  <iframe
+    className="
+      absolute
+      top-0
+      left-0
+      w-full
+      h-full
+    "
+    src={`https://www.youtube.com/embed/${
+      videoUrl
+        .split("v=")[1]
+        ?.split("&")[0]
+    }`}
+    title="YouTube video player"
+    allow="
+      accelerometer;
+      autoplay;
+      clipboard-write;
+      encrypted-media;
+      gyroscope;
+      picture-in-picture
+    "
+    allowFullScreen
+  ></iframe>
+
 </div>
 
-        {/* FORM SECTION */}
-        <div className="bg-white p-6 rounded-3xl shadow-md mb-10">
-          <h2 className="text-2xl font-semibold mb-5">
-            Add New PG Listing
+          {/* INPUT */}
+          <input
+            type="text"
+            placeholder="Paste YouTube URL..."
+            onChange={(e) => {
+
+              let url = e.target.value;
+
+              // SHORT LINK
+              if (url.includes("youtu.be/")) {
+
+                const id =
+                  url.split("youtu.be/")[1]
+                    ?.split("?")[0];
+
+                url =
+                  `https://www.youtube.com/watch?v=${id}`;
+              }
+
+              // SHORTS
+              if (url.includes("/shorts/")) {
+
+                const id =
+                  url.split("/shorts/")[1]
+                    ?.split("?")[0];
+
+                url =
+                  `https://www.youtube.com/watch?v=${id}`;
+              }
+
+              setVideoUrl(url);
+            }}
+
+            className="
+              w-full
+              mt-5
+              rounded-2xl
+              p-5
+              outline-none
+            "
+          />
+
+        </div>
+      </section>
+
+      {/* NOTES */}
+      <section className="
+        max-w-7xl mx-auto
+        px-6 mb-20
+      ">
+
+        <div className="
+          bg-white
+          rounded-[40px]
+          p-10
+          shadow-xl
+        ">
+
+          <div className="
+            flex items-center
+            justify-between
+            mb-6
+          ">
+            <h2 className="
+              text-4xl font-black
+            ">
+              📝 Smart Notes
+            </h2>
+
+            <div className="
+              text-green-600
+              font-bold
+            ">
+              Autosaved
+            </div>
+          </div>
+
+          <textarea
+            value={notes}
+            onChange={(e) =>
+              setNotes(e.target.value)
+            }
+            placeholder="
+# Notes
+
+• MongoDB concepts
+• YouTube lecture notes
+• Startup ideas
+            "
+            className="
+              w-full
+              min-h-[500px]
+              border
+              rounded-[30px]
+              p-8
+              outline-none
+              resize-none
+              text-lg
+              leading-10
+            "
+          />
+        </div>
+      </section>
+
+      {/* FORM */}
+      <section className="
+        max-w-7xl mx-auto
+        px-6 mb-20
+      ">
+
+        <div className="
+          bg-white
+          rounded-[40px]
+          p-10
+          shadow-xl
+        ">
+
+          <h2 className="
+            text-4xl font-black
+            mb-10
+          ">
+            Post Your PG
           </h2>
 
           <form
             onSubmit={handleSubmit}
-            className="grid gap-4 md:grid-cols-2"
+            className="
+              grid md:grid-cols-2
+              gap-6
+            "
           >
+
             <input
               type="text"
-              placeholder="PG / Room Title"
+              placeholder="PG Title"
               value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              className="border border-gray-300 p-4 rounded-xl outline-none focus:ring-2 focus:ring-blue-500"
+              onChange={(e) =>
+                setTitle(e.target.value)
+              }
+              className="
+                border
+                rounded-2xl
+                p-5 outline-none
+              "
             />
 
             <input
               type="number"
-              placeholder="Monthly Rent"
+              placeholder="Rent"
               value={rent}
-              onChange={(e) => setRent(e.target.value)}
-              className="border border-gray-300 p-4 rounded-xl outline-none focus:ring-2 focus:ring-blue-500"
+              onChange={(e) =>
+                setRent(e.target.value)
+              }
+              className="
+                border
+                rounded-2xl
+                p-5 outline-none
+              "
             />
 
             <input
               type="text"
               placeholder="Location"
               value={location}
-              onChange={(e) => setLocation(e.target.value)}
-              className="border border-gray-300 p-4 rounded-xl outline-none focus:ring-2 focus:ring-blue-500"
+              onChange={(e) =>
+                setLocation(e.target.value)
+              }
+              className="
+                border
+                rounded-2xl
+                p-5 outline-none
+              "
             />
 
             <input
               type="text"
-              placeholder="Phone Number"
+              placeholder="Phone"
               value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              className="border border-gray-300 p-4 rounded-xl outline-none focus:ring-2 focus:ring-blue-500"
+              onChange={(e) =>
+                setPhone(e.target.value)
+              }
+              className="
+                border
+                rounded-2xl
+                p-5 outline-none
+              "
             />
 
             <button
               type="submit"
-              className="bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-xl font-semibold transition duration-300 md:col-span-2"
+              className="
+                md:col-span-2
+                bg-blue-600
+                text-white
+                p-5 rounded-2xl
+                font-bold
+              "
             >
-              Add Listing
+              Add PG Listing
             </button>
           </form>
         </div>
+      </section>
 
-        {/* LISTINGS */}
-        <div>
-          <h2 className="text-3xl font-bold mb-6">
-            Available PG Listings
-          </h2>
+      {/* PG LISTINGS */}
+      <section className="
+        max-w-7xl mx-auto
+        px-6 pb-24
+      ">
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {rooms.map((room) => (
-              <div
-                key={room._id}
-                className="bg-white rounded-3xl shadow-md overflow-hidden hover:shadow-xl transition duration-300"
-              >
+        <h2 className="
+          text-5xl font-black
+          mb-10
+        ">
+          Featured PGs
+        </h2>
 
-                {/* IMAGE PLACEHOLDER */}
-                <div className="h-48 bg-gradient-to-r from-blue-400 to-indigo-500 flex items-center justify-center text-white text-xl font-bold">
-                  PG ROOM
-                </div>
+        <div className="
+          grid md:grid-cols-2
+          lg:grid-cols-3
+          gap-8
+        ">
 
-                <div className="p-5">
-                  <h3 className="text-2xl font-bold mb-2">
+          {rooms.map((room) => (
+
+            <div
+              key={room._id}
+              className="
+                bg-white
+                rounded-[35px]
+                overflow-hidden
+                shadow-xl
+              "
+            >
+
+              <div className="
+                h-64
+                bg-gradient-to-br
+                from-blue-500
+                to-indigo-600
+              " />
+
+              <div className="p-8">
+
+                <div className="
+                  flex items-center
+                  justify-between
+                  mb-4
+                ">
+                  <h3 className="
+                    text-2xl font-black
+                  ">
                     {room.title}
                   </h3>
 
-                  <p className="text-gray-600 mb-2">
-                    📍 {room.location}
-                  </p>
-
-                  <p className="text-xl font-semibold text-green-600 mb-4">
-                    ₹ {room.rent} / month
-                  </p>
-
-                  {/* WHATSAPP BUTTON */}
-                  <a
-                    href={`https://wa.me/91${room.phone}`}
-                    target="_blank"
-                    className="block text-center bg-green-500 hover:bg-green-600 text-white py-3 rounded-xl font-semibold transition duration-300"
-                  >
-                    Contact on WhatsApp
-                  </a>
+                  <div className="
+                    text-green-600
+                    font-black
+                  ">
+                    ₹{room.rent}
+                  </div>
                 </div>
+
+                <p className="
+                  text-gray-600
+                  mb-6
+                ">
+                  📍 {room.location}
+                </p>
+
+                <a
+                  href={`https://wa.me/91${room.phone}`}
+                  target="_blank"
+                  className="
+                    block
+                    text-center
+                    bg-green-500
+                    hover:bg-green-600
+                    text-white
+                    p-5 rounded-2xl
+                    font-bold
+                  "
+                >
+                  Contact on WhatsApp
+                </a>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
+
         </div>
-      </div>
+      </section>
     </main>
   );
 }
