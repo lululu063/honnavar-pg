@@ -59,7 +59,7 @@ export default function Home() {
     setLocation("");
     setPhone("");
 
-    // Reload rooms
+    // Reload listings
     fetchRooms();
   };
 
@@ -77,6 +77,29 @@ export default function Home() {
           <p className="text-lg opacity-90">
             Find affordable PGs and rental rooms in Honnavar.
           </p>
+        </div>
+
+        {/* RADIO PLAYER */}
+        <div className="bg-white p-6 rounded-3xl shadow-md mb-10">
+          <h2 className="text-2xl font-bold mb-4">
+            📻 Live Radio / News
+          </h2>
+
+          <p className="text-gray-600 mb-4">
+            Listen while browsing PG listings
+          </p>
+
+          <audio
+            controls
+            className="w-full"
+          >
+            <source
+              src="https://stream.live.vc.bbcmedia.co.uk/bbc_world_service"
+              type="audio/mpeg"
+            />
+
+            Your browser does not support audio.
+          </audio>
         </div>
 
         {/* FORM SECTION */}
