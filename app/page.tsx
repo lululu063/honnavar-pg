@@ -79,28 +79,76 @@ export default function Home() {
           </p>
         </div>
 
-        {/* RADIO PLAYER */}
-        <div className="bg-white p-6 rounded-3xl shadow-md mb-10">
-          <h2 className="text-2xl font-bold mb-4">
-            📻 Live Radio / News
-          </h2>
+{/* RADIO PLAYER */}
+<div className="bg-white p-6 rounded-3xl shadow-md mb-10">
+  <h2 className="text-2xl font-bold mb-6">
+    📻 Live Radio Stations
+  </h2>
 
-          <p className="text-gray-600 mb-4">
-            Listen while browsing PG listings
-          </p>
+  <div className="grid md:grid-cols-2 gap-6">
 
-          <audio
-            controls
-            className="w-full"
-          >
-            <source
-              src="https://stream.live.vc.bbcmedia.co.uk/bbc_world_service"
-              type="audio/mpeg"
-            />
+    {/* Kannada Radio */}
+    <div className="border rounded-2xl p-5 shadow-sm">
+      <h3 className="text-xl font-semibold mb-2">
+        🎶 Kannada Hits Radio
+      </h3>
 
-            Your browser does not support audio.
-          </audio>
-        </div>
+      <p className="text-gray-600 mb-4">
+        Relax with Kannada music while browsing PG listings.
+      </p>
+
+      <audio controls className="w-full">
+        <source
+          src="https://stream-150.zeno.fm/n4gzbe9ufzzuv"
+          type="audio/mpeg"
+        />
+
+        Your browser does not support audio.
+      </audio>
+    </div>
+
+    {/* Urdu Qawwali */}
+    <div className="border rounded-2xl p-5 shadow-sm">
+      <h3 className="text-xl font-semibold mb-2">
+        🕌 Urdu Qawwali Radio
+      </h3>
+
+      <p className="text-gray-600 mb-4">
+        Listen to soulful qawwali and sufi music.
+      </p>
+
+      <audio controls className="w-full">
+        <source
+          src="https://stream.zeno.fm/f3wvbbqmdg8uv"
+          type="audio/mpeg"
+        />
+
+        Your browser does not support audio.
+      </audio>
+    </div>
+
+    {/* BBC News */}
+    <div className="border rounded-2xl p-5 shadow-sm md:col-span-2">
+      <h3 className="text-xl font-semibold mb-2">
+        📰 BBC World News Radio
+      </h3>
+
+      <p className="text-gray-600 mb-4">
+        International live news updates.
+      </p>
+
+      <audio controls className="w-full">
+        <source
+          src="https://stream.live.vc.bbcmedia.co.uk/bbc_world_service"
+          type="audio/mpeg"
+        />
+
+        Your browser does not support audio.
+      </audio>
+    </div>
+
+  </div>
+</div>
 
         {/* FORM SECTION */}
         <div className="bg-white p-6 rounded-3xl shadow-md mb-10">
